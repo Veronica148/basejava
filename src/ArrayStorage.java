@@ -1,4 +1,4 @@
-import java.util.NoSuchElementException;
+import java.util.Arrays;
 
 /**
  * Array based storage for Resumes
@@ -6,22 +6,22 @@ import java.util.NoSuchElementException;
 public class ArrayStorage {
 
     Resume[] storage = new Resume[10000];
-    int arraySize = 0;
+    int count = 0;
 
     void clear() {
-        for (int i = 0; i < arraySize; i++) {
+        for (int i = 0; i < count; i++) {
             storage[i] = null;
         }
-        arraySize = 0;
+        count = 0;
     }
 
     void save(Resume r) {
-        storage[arraySize] = r;
-        arraySize++;
+        storage[count] = r;
+        count++;
     }
 
     Resume get(String uuid) {
-        for (int i = 0; i < arraySize; i++) {
+        for (int i = 0; i < count; i++) {
             if (storage[i].toString().equals(uuid)) {
                 return storage[i];
             }
@@ -30,14 +30,14 @@ public class ArrayStorage {
     }
 
     void delete(String uuid) {
-        for (int i = 0; i < arraySize; i++) {
+        for (int i = 0; i < count; i++) {
             if (storage[i].toString().equals(uuid)) {
-                storage[i] = null;
                 System.out.println("Element " + uuid + " was deleted");
-                for (int j = i; j < arraySize; j++) {
-                    storage[j] = storage[j+1];
+                for (int j = i; j < count - 1; j++) {
+                    storage[j] = storage[j + 1];
                 }
-                arraySize--;
+                storage[count - 1] = null;
+                count--;
                 break;
             }
         }
@@ -47,14 +47,10 @@ public class ArrayStorage {
      * @return array, contains only Resumes in storage (without null)
      */
     Resume[] getAll() {
-        Resume[] curStorage = new Resume[arraySize];
-        for (int i = 0; i < arraySize; i++) {
-            curStorage[i] = storage[i];
-        }
-        return curStorage;
+        return Arrays.copyOf(storage, count);
     }
 
     int size() {
-        return arraySize;
+        return count;
     }
 }
